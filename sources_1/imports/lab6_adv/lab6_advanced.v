@@ -38,5 +38,8 @@ module lab6_advanced(
 
     //CT Fu  ck
 
+
     //no
+
+
 endmodule
