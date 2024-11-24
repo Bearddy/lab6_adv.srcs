@@ -12,6 +12,7 @@ module lab6_advanced(
     output IN4,
     output left_pwm,
     output right_pwm,
+    output [7:0] DISPLAY
     // You may modify or add more input/ouput yourself.
 );
     // We have connected the motor and sonic_top modules in the template file for you.
