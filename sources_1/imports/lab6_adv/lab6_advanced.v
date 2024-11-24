@@ -37,4 +37,6 @@ module lab6_advanced(
     //hello
 
     //CT Fu  ck
+
+    //no
 endmodule
