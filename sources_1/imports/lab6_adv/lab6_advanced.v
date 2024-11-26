@@ -12,7 +12,7 @@ module lab6_advanced(
     output IN4,
     output left_pwm,
     output right_pwm,
-    output [7:0] DISPLAY,
+    output [6:0] DISPLAY,
 	output [3:0] DIGIT
     // You may modify or add more input/ouput yourself.
 );

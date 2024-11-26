@@ -78,7 +78,7 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 # set_property PACKAGE_PIN L1 [get_ports {motorLED[2]}]
 # set_property IOSTANDARD LVCMOS33 [get_ports {motorLED[2]}]
 
-7 segment display
+#7 segment display
  set_property PACKAGE_PIN W7 [get_ports {DISPLAY[0]}]
     set_property IOSTANDARD LVCMOS33 [get_ports {DISPLAY[0]}]
  set_property PACKAGE_PIN W6 [get_ports {DISPLAY[1]}]
