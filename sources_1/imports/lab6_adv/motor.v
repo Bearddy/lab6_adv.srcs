@@ -25,6 +25,9 @@ module motor(
     parameter RIGHT = 2'b10;
     parameter LEFT = 2'b11;
 
+    parameter FAST = 10'd512;
+    parameter SLOW = 10'd256;
+
     always@(posedge clk, posedge rst) begin
         if(rst) begin
             left_motor <= 0;
@@ -33,26 +36,30 @@ module motor(
         else begin
             case(mode)
                 FORWARD:begin
-                    left_motor <= 10'd512;
-                    right_motor <= 10'd512;
+                    left_motor <= FAST;
+                    right_motor <= FAST;
                 end
                 BACKWARD:begin
-                    left_motor <= 10'd512;
-                    right_motor <= 10'd512;
+                    left_motor <= FAST;
+                    right_motor <= FAST;
                 end
                 RIGHT:begin
-                    left_motor <= 10'd512;
-                    right_motor <= 10'd256;
+                    left_motor <= FAST;
+                    right_motor <= SLOW;
                 end
                 LEFT:begin
-                    left_motor <= 10'd256;
-                    right_motor <= 10'd512;
+                    left_motor <= SLOW;
+                    right_motor <= FAST;
                 end
             endcase
         end
     end
+    
 
     reg IN1, IN2, IN3, IN4;
+
+    assign l_IN = {IN1, IN2};
+    assign r_IN = {IN3, IN4};
 
     always@(posedge clk, posedge rst) begin
         if(rst) begin
@@ -78,12 +85,12 @@ module motor(
                 RIGHT:begin
                     IN1 <= 1;
                     IN2 <= 0;
-                    IN3 <= 0;
-                    IN4 <= 1;
+                    IN3 <= 1;
+                    IN4 <= 0;
                 end
                 LEFT:begin
-                    IN1 <= 0;
-                    IN2 <= 1;
+                    IN1 <= 1;
+                    IN2 <= 0;
                     IN3 <= 1;
                     IN4 <= 0;
                 end

@@ -19,6 +19,15 @@ module lab6_advanced(
     // We have connected the motor and sonic_top modules in the template file for you.
     // TODO: control the motors with the information you get from ultrasonic sensor and 3-way track sensor.
 
+	SevenSegment seg(
+		.display(DISPLAY),
+		.digit(DIGIT),
+		.nums({3'b000, IN1, 3'b000, IN2, 3'b000, IN3, 3'b000, IN4}),
+		.rst(rst),
+		.clk(clk)
+	);
+
+
 	wire [1:0] mode;
 
     motor A(
