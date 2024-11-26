@@ -19,10 +19,10 @@ module tracker_sensor(clk, reset, left_track, right_track, mid_track, state);
             if (left_track && right_track && ~mid_track) begin // middle black
                 state <= FORWARD; //straight
             end 
-            else if (left_track && ~right_track && mid_track) begin
+            else if ((left_track && ~right_track && mid_track) || (left_track && ~right_track && ~mid_track)) begin
                 state <= RIGHT; //turn right
             end 
-            else if (~left_track && right_track && mid_track) begin
+            else if ((~left_track && right_track && mid_track) || (~left_track && right_track && ~mid_track)) begin
                 state <= LEFT;//turn left
             end
             else begin
