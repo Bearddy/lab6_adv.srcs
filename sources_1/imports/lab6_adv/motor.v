@@ -19,6 +19,77 @@ module motor(
     assign pwm = {left_pwm,right_pwm};
 
     // TODO: trace the rest of motor.v and control the speed and direction of the two motors
+
+    parameter FORWARD = 2'b00;
+    parameter BACKWARD = 2'b01;
+    parameter RIGHT = 2'b10;
+    parameter LEFT = 2'b11;
+
+    always@(posedge clk, posedge rst) begin
+        if(rst) begin
+            left_motor <= 0;
+            right_motor <= 0;
+        end
+        else begin
+            case(mode)
+                FORWARD:begin
+                    left_motor <= 10'd512;
+                    right_motor <= 10'd512;
+                end
+                BACKWARD:begin
+                    left_motor <= 10'd512;
+                    right_motor <= 10'd512;
+                end
+                RIGHT:begin
+                    left_motor <= 10'd512;
+                    right_motor <= 10'd256;
+                end
+                LEFT:begin
+                    left_motor <= 10'd256;
+                    right_motor <= 10'd512;
+                end
+            endcase
+        end
+    end
+
+    reg IN1, IN2, IN3, IN4;
+
+    always@(posedge clk, posedge rst) begin
+        if(rst) begin
+            IN1 <= 0;
+            IN2 <= 0;
+            IN3 <= 0;
+            IN4 <= 0;
+        end
+        else begin
+            case(mode)
+                FORWARD:begin
+                    IN1 <= 1;
+                    IN2 <= 0;
+                    IN3 <= 1;
+                    IN4 <= 0;
+                end
+                BACKWARD:begin
+                    IN1 <= 0;
+                    IN2 <= 1;
+                    IN3 <= 0;
+                    IN4 <= 1;
+                end
+                RIGHT:begin
+                    IN1 <= 1;
+                    IN2 <= 0;
+                    IN3 <= 0;
+                    IN4 <= 1;
+                end
+                LEFT:begin
+                    IN1 <= 0;
+                    IN2 <= 1;
+                    IN3 <= 1;
+                    IN4 <= 0;
+                end
+            endcase
+        end
+    end
     
 
     
@@ -60,6 +131,11 @@ module PWM_gen (
         end else if (count < count_max) begin
             count <= count + 1;
             // TODO: set <PWM> accordingly
+            if (count < count_duty) begin
+                PWM <= 1;
+            end else begin
+                PWM <= 0;
+            end
         end else begin
             count <= 0;
             PWM <= 0;
