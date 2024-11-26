@@ -25,8 +25,8 @@ module motor(
     parameter RIGHT = 2'b10;
     parameter LEFT = 2'b11;
 
-    parameter FAST = 10'd512;
-    parameter SLOW = 10'd256;
+    parameter FAST = 10'd800;
+    parameter SLOW = 10'd350;
 
     always@(posedge clk, posedge rst) begin
         if(rst) begin
@@ -85,12 +85,12 @@ module motor(
                 RIGHT:begin
                     IN1 <= 1;
                     IN2 <= 0;
-                    IN3 <= 1;
-                    IN4 <= 0;
+                    IN3 <= 0;
+                    IN4 <= 1;
                 end
                 LEFT:begin
-                    IN1 <= 1;
-                    IN2 <= 0;
+                    IN1 <= 0;
+                    IN2 <= 1;
                     IN3 <= 1;
                     IN4 <= 0;
                 end

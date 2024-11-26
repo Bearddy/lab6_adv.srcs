@@ -13,23 +13,45 @@ module lab6_advanced(
     output left_pwm,
     output right_pwm,
     output [6:0] DISPLAY,
-	output [3:0] DIGIT
+	output [3:0] DIGIT,
+	output [7:0] LED,
+	output reg [7:0] version
     // You may modify or add more input/ouput yourself.
 );
     // We have connected the motor and sonic_top modules in the template file for you.
     // TODO: control the motors with the information you get from ultrasonic sensor and 3-way track sensor.
 
+	always@(*) begin
+		version = 8'b00000001;
+	end
+	
+	wire [3:0] num1;
+	wire [3:0] num2;
+	wire [3:0] num3;
+	wire [3:0] num4;
+
 	SevenSegment seg(
 		.display(DISPLAY),
 		.digit(DIGIT),
-		.nums({3'b000, IN1, 3'b000, IN2, 3'b000, IN3, 3'b000, IN4}),
+		.nums({num4, num3, num2, num1}),
 		.rst(rst),
 		.clk(clk)
 	);
+	
+
+	number_change num_change(
+		.num(0),
+		.num1(num1),
+		.num2(num2),
+		.num3(num3),
+		.num4(num4)
+	);
+
+	
 
 
 	wire [1:0] mode;
-
+	assign LED = {1'b0, mode, 1'b0, IN1, IN2, IN3, IN4};
     motor A(
         .clk(clk),
         .rst(rst),
@@ -57,6 +79,25 @@ module lab6_advanced(
 		.state(mode)
 	);
 
+endmodule
+
+module number_change(
+	input wire [19:0] num,
+	output reg [3:0] num1,
+	output reg [3:0] num2,
+	output reg [3:0] num3,
+	output reg [3:0] num4
+	);
+
+	wire [12:0] num_to_8192;
+	assign num_to_8192 = num[12:0];
+
+	always @ (*) begin
+		num4 = num_to_8192/1000;
+		num3 = (num_to_8192%1000)/100;
+		num2 = (num_to_8192%100)/10;
+		num1 = num_to_8192%10;	
+	end
 endmodule
 
 module SevenSegment(
