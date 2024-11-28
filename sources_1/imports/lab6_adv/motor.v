@@ -5,6 +5,8 @@ module motor(
     input clk,
     input rst,
     input [1:0]mode,
+    input [19:0] distance,
+    input [15:0] sw,
     output [1:0]pwm,
     output [1:0]r_IN,
     output [1:0]l_IN
@@ -26,7 +28,8 @@ module motor(
     parameter LEFT = 2'b11;
 
     parameter FAST = 10'd800;
-    parameter SLOW = 10'd350;
+    parameter SLOW = 10'd700;
+    parameter TURN_SPEED = 10'd750;
 
     always@(posedge clk, posedge rst) begin
         if(rst) begin
@@ -44,14 +47,15 @@ module motor(
                     right_motor <= FAST;
                 end
                 RIGHT:begin
-                    left_motor <= FAST;
-                    right_motor <= SLOW;
+                    left_motor <= TURN_SPEED;
+                    right_motor <= 0;
                 end
                 LEFT:begin
-                    left_motor <= SLOW;
-                    right_motor <= FAST;
+                    left_motor <= 0;
+                    right_motor <= TURN_SPEED;
                 end
             endcase
+            
         end
     end
     
@@ -61,45 +65,44 @@ module motor(
     assign l_IN = {IN1, IN2};
     assign r_IN = {IN3, IN4};
 
-    always@(posedge clk, posedge rst) begin
-        if(rst) begin
-            IN1 <= 0;
-            IN2 <= 0;
-            IN3 <= 0;
-            IN4 <= 0;
+    //always@(posedge clk, posedge rst) begin
+    always@(*) begin    
+        if(distance < 20'd31) begin
+            IN1 = 0;
+            IN2 = 0;
+            IN3 = 0;
+            IN4 = 0;
         end
         else begin
+            
             case(mode)
                 FORWARD:begin
-                    IN1 <= 1;
-                    IN2 <= 0;
-                    IN3 <= 1;
-                    IN4 <= 0;
+                    IN1 = 1;
+                    IN2 = 0;
+                    IN3 = 1;
+                    IN4 = 0;
                 end
                 BACKWARD:begin
-                    IN1 <= 0;
-                    IN2 <= 1;
-                    IN3 <= 0;
-                    IN4 <= 1;
+                    IN1 = 0;
+                    IN2 = 1;
+                    IN3 = 0;
+                    IN4 = 1;
                 end
                 RIGHT:begin
-                    IN1 <= 1;
-                    IN2 <= 0;
-                    IN3 <= 0;
-                    IN4 <= 1;
+                    IN1 = 1;
+                    IN2 = 0;
+                    IN3 = 0;
+                    IN4 = 1;
                 end
                 LEFT:begin
-                    IN1 <= 0;
-                    IN2 <= 1;
-                    IN3 <= 1;
-                    IN4 <= 0;
+                    IN1 = 0;
+                    IN2 = 1;
+                    IN3 = 1;
+                    IN4 = 0;
                 end
             endcase
         end
-    end
-    
-
-    
+    end    
 endmodule
 
 module motor_pwm (

@@ -5,6 +5,7 @@ module lab6_advanced(
     input left_track,
     input right_track,
     input mid_track,
+	input [15:0] sw,
     output trig,
     output IN1,
     output IN2,
@@ -22,40 +23,43 @@ module lab6_advanced(
     // TODO: control the motors with the information you get from ultrasonic sensor and 3-way track sensor.
 
 	always@(*) begin
-		version = 8'b00000001;
+		version = 8'b00000111;
 	end
 	
+	wire [19:0] distance;
+
 	wire [3:0] num1;
 	wire [3:0] num2;
 	wire [3:0] num3;
-	wire [3:0] num4;
+	wire [1:0] mode;
+	assign LED = {left_pwm, right_pwm, mode, IN1, IN2, IN3, IN4};
 
 	SevenSegment seg(
 		.display(DISPLAY),
 		.digit(DIGIT),
-		.nums({num4, num3, num2, num1}),
+		.nums({mode + 10, num3, num2, num1}),
 		.rst(rst),
 		.clk(clk)
 	);
 	
 
 	number_change num_change(
-		.num(0),
+		.num(distance),
 		.num1(num1),
 		.num2(num2),
-		.num3(num3),
-		.num4(num4)
+		.num3(num3)
 	);
 
 	
 
 
-	wire [1:0] mode;
-	assign LED = {1'b0, mode, 1'b0, IN1, IN2, IN3, IN4};
+	
     motor A(
         .clk(clk),
         .rst(rst),
         .mode(mode),
+		.sw(sw),
+		.distance(distance),
         .pwm({left_pwm, right_pwm}),
         .l_IN({IN1, IN2}),
         .r_IN({IN3, IN4})
@@ -76,7 +80,8 @@ module lab6_advanced(
 		.left_track(left_track),
 		.right_track(right_track),
 		.mid_track(mid_track),
-		.state(mode)
+		.state(mode),
+		.sw(sw)
 	);
 
 endmodule
@@ -85,19 +90,32 @@ module number_change(
 	input wire [19:0] num,
 	output reg [3:0] num1,
 	output reg [3:0] num2,
-	output reg [3:0] num3,
-	output reg [3:0] num4
+	output reg [3:0] num3
 	);
 
-	wire [12:0] num_to_8192;
-	assign num_to_8192 = num[12:0];
+	wire [8:0] num_to_511;
+	assign num_to_511 = num[8:0];
 
 	always @ (*) begin
-		num4 = num_to_8192/1000;
-		num3 = (num_to_8192%1000)/100;
-		num2 = (num_to_8192%100)/10;
-		num1 = num_to_8192%10;	
+		if(num_to_511 > 400) begin
+			num3 = 15;
+			num2 = 15;
+			num1 = 15;
+		end
+		else begin
+			num3 = (num_to_511)/100;
+			num2 = (num_to_511%100)/10;
+			num1 = num_to_511%10;	
+		end
 	end
+
+	// always@(*) begin
+	// 	num4 = 5;
+	// 	num3 = num_to_8192[11:8];
+	// 	num2 = num_to_8192[7:4];
+	// 	num1 = num_to_8192[3:0];
+		
+	// end
 endmodule
 
 module SevenSegment(
@@ -161,7 +179,12 @@ module SevenSegment(
 			7 : display = 7'b1111000;   //0111
 			8 : display = 7'b0000000;   //1000
 			9 : display = 7'b0010000;	//1001
-			default : display = 7'b1111111;
+			10 : display = 7'b0001110; // F
+			11 : display = 7'b0000011; // b
+			12 : display = 7'b0101111; // r
+			13 : display = 7'b1000111; // L
+			
+			default : display = 7'b0111111;
     	endcase
     end
     
