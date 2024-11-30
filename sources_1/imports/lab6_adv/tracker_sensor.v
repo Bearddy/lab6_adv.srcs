@@ -36,7 +36,7 @@ module tracker_sensor(clk, reset, left_track, right_track, mid_track, state, sw)
                 counter <= 0;
             end
             else if (left_track && mid_track && right_track) begin
-                if(counter > 28'b1000111100001101000110000000) begin //1.5sec
+                if(counter > 28'b1010011011100100100111000000) begin //1.5sec
                     state <= BACKWARD;
                     counter <= counter;
                 end

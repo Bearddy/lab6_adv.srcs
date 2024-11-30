@@ -27,8 +27,7 @@ module motor(
     parameter RIGHT = 2'b10;
     parameter LEFT = 2'b11;
 
-    parameter FAST = 10'd800;
-    parameter SLOW = 10'd700;
+    parameter NORMAL = 10'd765;
     parameter TURN_SPEED = 10'd750;
 
     always@(posedge clk, posedge rst) begin
@@ -39,12 +38,12 @@ module motor(
         else begin
             case(mode)
                 FORWARD:begin
-                    left_motor <= FAST;
-                    right_motor <= FAST;
+                    left_motor <= NORMAL;
+                    right_motor <= NORMAL;
                 end
                 BACKWARD:begin
-                    left_motor <= FAST;
-                    right_motor <= FAST;
+                    left_motor <= NORMAL;
+                    right_motor <= NORMAL;
                 end
                 RIGHT:begin
                     left_motor <= TURN_SPEED;
