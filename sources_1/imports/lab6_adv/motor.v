@@ -28,7 +28,8 @@ module motor(
     parameter LEFT = 2'b11;
 
     parameter NORMAL = 10'd765;
-    parameter TURN_SPEED = 10'd750;
+    parameter TURN_SPEED = 10'd755;
+
 
     always@(posedge clk, posedge rst) begin
         if(rst) begin
@@ -90,12 +91,12 @@ module motor(
                 RIGHT:begin
                     IN1 = 1;
                     IN2 = 0;
-                    IN3 = 0;
-                    IN4 = 1;
+                    IN3 = 1;
+                    IN4 = 0;
                 end
                 LEFT:begin
-                    IN1 = 0;
-                    IN2 = 1;
+                    IN1 = 1;
+                    IN2 = 0;
                     IN3 = 1;
                     IN4 = 0;
                 end
