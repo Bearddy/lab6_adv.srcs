@@ -6,7 +6,6 @@ module motor(
     input rst,
     input [1:0]mode,
     input [19:0] distance,
-    input [15:0] sw,
     output [1:0]pwm,
     output [1:0]r_IN,
     output [1:0]l_IN

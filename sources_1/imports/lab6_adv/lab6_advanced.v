@@ -5,7 +5,6 @@ module lab6_advanced(
     input left_track,
     input right_track,
     input mid_track,
-	input [15:0] sw,
     output trig,
     output IN1,
     output IN2,
@@ -15,17 +14,12 @@ module lab6_advanced(
     output right_pwm,
     output [6:0] DISPLAY,
 	output [3:0] DIGIT,
-	output [7:0] LED,
-	output reg [7:0] version
+	output [7:0] LED
     // You may modify or add more input/ouput yourself.
 );
     // We have connected the motor and sonic_top modules in the template file for you.
     // TODO: control the motors with the information you get from ultrasonic sensor and 3-way track sensor.
 
-	always@(*) begin
-		version = 8'b00000111;
-	end
-	
 	wire [19:0] distance;
 
 	wire [3:0] num1;
@@ -58,7 +52,6 @@ module lab6_advanced(
         .clk(clk),
         .rst(rst),
         .mode(mode),
-		.sw(sw),
 		.distance(distance),
         .pwm({left_pwm, right_pwm}),
         .l_IN({IN1, IN2}),
@@ -80,8 +73,7 @@ module lab6_advanced(
 		.left_track(left_track),
 		.right_track(right_track),
 		.mid_track(mid_track),
-		.state(mode),
-		.sw(sw)
+		.state(mode)
 	);
 
 endmodule

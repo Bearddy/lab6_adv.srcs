@@ -1,9 +1,8 @@
-module tracker_sensor(clk, reset, left_track, right_track, mid_track, state, sw);
+module tracker_sensor(clk, reset, left_track, right_track, mid_track, state);
     input clk;
     input reset;
     input left_track, right_track, mid_track;
     output reg [1:0] state;
-    input [15:0] sw;
 
     // TODO: Receive three tracks and make your own policy.
     // Hint: You can use output state to change your action.
@@ -36,7 +35,7 @@ module tracker_sensor(clk, reset, left_track, right_track, mid_track, state, sw)
                 counter <= 0;
             end
             else if (left_track && mid_track && right_track) begin
-                if(counter > 28'b1010011011100100100111000000) begin //1.5sec
+                if(counter > 28'b1010011011100100100111000000) begin //1.75sec
                     state <= BACKWARD;
                     counter <= counter;
                 end
